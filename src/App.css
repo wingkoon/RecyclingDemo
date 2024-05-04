@@ -36,3 +36,34 @@
     transform: rotate(360deg);
   }
 }
+h1 {
+  font-size: 2em; /* Set a larger font size for the heading */
+  margin: 0; /* Remove default margin for heading */
+}
+
+p {
+  font-size: 16px; /* Set a comfortable font size for the message */
+  line-height: 1.5; /* Increase line spacing for better readability */
+  margin: 20px 0; /* Add some margin above and below the paragraph */
+  text-align: center; /* Center align the recycling message text */
+}
+
+.buttons {
+  display: flex; /* Arrange buttons horizontally */
+  justify-content: center; /* Center buttons horizontally */
+  gap: 10px; /* Add some spacing between buttons */
+}
+
+.button {
+  background-color: #4CAF50; /* Green color for buttons */
+  color: white; /* White text for buttons */
+  padding: 10px 20px; /* Add some padding inside buttons */
+  border: none; /* Remove default button border */
+  border-radius: 5px; /* Add rounded corners for a modern look */
+  cursor: pointer; /* Make it clear it's a clickable button */
+  transition: background-color 0.2s ease-in-out; /* Add a smooth hover effect */
+}
+
+.button:hover {
+  background-color: #3e8e41; /* Darker green on hover */
+}
