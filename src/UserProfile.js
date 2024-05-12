@@ -1,22 +1,15 @@
 import React, { useState, useEffect } from 'react';
 
-function UserProfile() {
-  const [name, setName] = useState('');
+const UserProfile = ({ userInfo, updateUserInfo }) => {
+  const [name, setName] = useState(userInfo.name || '');
+  const [phone, setPhone] = useState('');
   const [email, setEmail] = useState('');
   const [address, setAddress] = useState('');
-  const [preferences, setPreferences] = useState([]); // Array to store user preferences
+  const [location, setLocation] = useState(userInfo.location || '');
 
-  // Fetches user data on initial render (replace with your actual data fetching logic)
+  // Fetch user information on component mount (if needed)
   useEffect(() => {
-    const fetchUserData = async () => {
-      const response = await fetch('/api/user/profile');
-      const data = await response.json();
-      setName(data.name);
-      setEmail(data.email);
-      setAddress(data.address);
-      setPreferences(data.preferences); // Assuming preferences are stored in user data
-    };
-    fetchUserData();
+    // Code to fetch user information
   }, []);
 
   const handleInputChange = (event) => {
@@ -25,122 +18,81 @@ function UserProfile() {
       case 'name':
         setName(value);
         break;
+      case 'phone':
+          setPhone(value);
+          break;
       case 'email':
         setEmail(value);
         break;
       case 'address':
-        setAddress(value);
-        break;
-      case 'preference':
-        // Handle preference selection (e.g., add/remove from preferences array)
-        const selectedPreference = value;
-        if (preferences.includes(selectedPreference)) {
-          setPreferences(preferences.filter((pref) => pref !== selectedPreference));
-        } else {
-          setPreferences([...preferences, selectedPreference]);
-        }
+          setAddress(value);
+          break;  
+      case 'location':
+        setLocation(value);
         break;
       default:
         break;
     }
   };
 
-  const handleSubmit = async (event) => {
+  const handleSubmit = (event) => {
     event.preventDefault();
-
-    // Implement logic to send updated user data to your backend API for saving
-    const updatedUserData = { name, email, address, preferences };
-    const response = await fetch('/api/user/profile', {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(updatedUserData),
-    });
-
-    if (!response.ok) {
-      console.error('Profile update failed:', response.statusText);
-      return;
-    }
-
-    console.log('Profile update successful!');
+    updateUserInfo({ name, phone, email, address, location }); // Pass updated info to parent
   };
 
   return (
     <div className="user-profile">
-      <h1>User Profile</h1>
+      <h2>User Profile</h2>
       <form onSubmit={handleSubmit}>
-        <label htmlFor="name">
-          Name:
-        </label>
+        <label htmlFor="name">Name: </label>
         <input
           type="text"
           id="name"
+          name="name"
           value={name}
           onChange={handleInputChange}
           required
         />
-        <label htmlFor="email">
-          Email:
-        </label>
+        <label htmlFor="phone">Phone Number: </label>
         <input
-          type="email"
+          type="text"
+          id="phone"
+          name="phone"
+          value={phone}
+          onChange={handleInputChange}
+          required
+        />
+        <label htmlFor="email">Email: </label>
+        <input
+          type="text"
           id="email"
+          name="email"
           value={email}
           onChange={handleInputChange}
           required
         />
-        <label htmlFor="address">
-          Address:
-        </label>
+        <label htmlFor="address">Contact Info: </label>
         <input
           type="text"
           id="address"
+          name="address"
           value={address}
           onChange={handleInputChange}
           required
         />
-        <label htmlFor="preferences">
-          Preferences (Select all that apply):
-        </label>
-        <div className="preferences">
-          {/* Replace with your actual list of preferences */}
-          <label>
-            <input
-              type="checkbox"
-              id="preference-paper"
-              name="preference"
-              value="paper"
-              checked={preferences.includes('paper')}
-              onChange={handleInputChange}
-            />
-            Paper
-          </label>
-          <label>
-            <input
-              type="checkbox"
-              id="preference-plastic"
-              name="preference"
-              value="plastic"
-              checked={preferences.includes('plastic')}
-              onChange={handleInputChange}
-            />
-            Plastic
-          </label>
-          <label>
-            <input
-              type="checkbox"
-              id="preference-glass"
-              name="preference"
-              value="glass"
-              checked={preferences.includes('glass')}
-              onChange={handleInputChange}
-            />
-            Glass
-          </label>
-        </div>
+        <label htmlFor="location">Location: </label>
+        <input
+          type="text"
+          id="location"
+          name="location"
+          value={location}
+          onChange={handleInputChange}
+        />
         <button type="submit">Save Profile</button>
       </form>
     </div>
   );
-}
+};
 
 export default UserProfile;
+

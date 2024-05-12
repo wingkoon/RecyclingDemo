@@ -17,9 +17,12 @@ CREATE TABLE IF NOT EXISTS recycling_service_providers (
 CREATE TABLE IF NOT EXISTS users (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   name TEXT NOT NULL,
-  contact_info TEXT,
+  phone INTEGER VARCHAR(9),
+  email TEXT,
+  address TEXT,
   location TEXT,
   waste_category_id INTEGER REFERENCES waste_categories(id),
+  waste_type TEXT,
   waste_quantity INTEGER,
   waste_condition TEXT,
   pickup_scheduled BOOLEAN DEFAULT FALSE  -- Optional: Flag to indicate pickup scheduling
