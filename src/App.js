@@ -3,14 +3,17 @@ import Login from './Login';
 import Register from './Register';
 import Video from './Video'; // Assuming Video.js is in a separate file
 import './App.css';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate
 
 function App() {
   const avatar = "/recycle.png";
   const [isPlaying, setIsPlaying] = useState(false); // Video playing state
   const logoRef = useRef(null); // Ref to hold logo element
+  const navigate = useNavigate(); // Hook for navigation
+
 
   const handleLogin = () => {
-    <Login />; // JSX inside functions is not allowed. Render Login conditionally.
+    navigate('/user/login'); // Navigate to /login route on button click
   };
 
   const handleRegistration = () => {
@@ -38,10 +41,10 @@ function App() {
         </p>
         <div className="buttons">
           <button className="button" onClick={handleLogin}>
-            Login
+            User Login
           </button>
           <button className="button" onClick={handleRegistration}>
-            Register
+            Recycling Provider Login
           </button>
           <button className="button" onClick={handlePlay}>
             Play Video
@@ -54,3 +57,4 @@ function App() {
 }
 
 export default App;
+
