@@ -1,0 +1,75 @@
+/* user-dashboard.css */
+.user-dashboard {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background-color: hsl(140, 38%, 36%); /* Light green */
+    padding: 20px;
+  }
+  
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #8895b9; /* Darker green */
+    padding: 10px 20px;
+    border-radius: 5px;
+  }
+  
+  .profile {
+    display: flex;
+    align-items: center;
+  }
+  
+  .profile p {
+    margin-right: 10px;
+    font-weight: bold;
+  }
+  
+  nav {
+    display: flex;
+  }
+  
+  nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  nav li {
+    margin-right: 15px;
+  }
+  
+  a {
+    text-decoration: none;
+    color: #333;
+  }
+  
+  a:hover {
+    color: #007bff; /* Blue for hover effect */
+  }
+  
+  button {
+    background-color: #f0ad4e; /* Orange for logout button */
+    color: #fff;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+  }
+  
+  button:hover {
+    background-color: #d79927; /* Darker orange on hover */
+  }
+  
+  .main-content {
+    flex: 1; /* Main content takes up remaining space */
+    padding: 20px;
+  }
+  
+  /* login-container.css (optional) */
+  .login-container {
+    text-align: center;
+    padding: 20px;
+  }
+  
