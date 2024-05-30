@@ -11,7 +11,6 @@ function ProviderLogin() {
   const [errorMessage, setErrorMessage] = useState(''); // Error message state
   const backendUrl = 'http://localhost:8001'; // More descriptive variable name
   const { setIsLoggedIn, setUserType, setUserEmail, setUserProfile } = useContext(LoginContext);
-setUserType('provider');
 
   const handleLogin = async () => {
     if (!email || !password) {
@@ -29,11 +28,6 @@ setUserType('provider');
         password,
       });
 
-      if (!response.data.success) {
-        setErrorMessage(response.data.message || 'Invalid email or password.');
-        return; // Handle login failure gracefully
-      }
-
       // Successful login
       setUserType('provider'); // Assuming user type is always 'user' here
       setUserEmail(email);
@@ -41,8 +35,10 @@ setUserType('provider');
       setIsLoggedIn(true);
 
       navigate('/provider'); // Navigate to user profile after successful login
+
     } catch (error) {
-      console.error('Login error:', error);
+      setErrorMessage('Invalid email or password.Please Input Again!');
+      console.log('errorMessage:', errorMessage); 
     }
   };
 
@@ -61,33 +57,21 @@ setUserType('provider');
         email,
         password,
       });
-if (response.data.success) {
+
   setUserType('provider'); // Assuming user type is always 'user' here
       setUserEmail(email);
       setIsLoggedIn(true);
 
-      navigate('/provider/profile'); // Navigate to user profile after successful registration
-}
-      if (!response.data.success) {
-        setErrorMessage(response.data.message || 'Email exists. Please login or register with a different email.');
-        return; // Handle registration failure gracefully
-      }
-
-      // Successful registration
-      setUserType('provider'); // Assuming user type is always 'user' here
-      setUserEmail(email);
-      setIsLoggedIn(true);
-
-      navigate('/provider/profile'); // Navigate to user profile after successful registration
+      navigate('/user/profile'); // Navigate to user profile after successful registration
     } catch (error) {
       console.error('Registration error:', error);
-    
+      setErrorMessage('Email exists. Please login or register with a different email.');
     }
   };
 
   return (
-    <div className="login-register">
-      <h2>{isLoginSelected ? 'Welcome! Service Provider Please login' : 'New user? Please register'}</h2>
+    <div className="Service Provider login-register">
+      <h2>{isLoginSelected ? 'Welcome! Please login' : 'New user? Please register'}</h2>
       <form onSubmit={(e) => e.preventDefault()}> {/* Prevent default form submission */}
         <label htmlFor="email">Email:</label>
         <input type="email" id="email" value={email} onChange={(e) => setEmail(e.target.value)} required />

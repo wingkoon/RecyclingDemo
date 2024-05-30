@@ -1,71 +1,32 @@
 /* General styles */
-body {
-    margin: 0;
-    padding: 0;
-    font-family: Arial, sans-serif;
-  }
+/* Centering the profile-page content horizontally */
+.profile-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh; /* Optional: Set minimum height for full viewport */
+  background-color: #18c329; /* Optional: Set background color */
+  background-image: url(/back1.jpg);
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+
+  filter: 'brightness(0.2) contrast(1.1)',
+}
+/* Centering the profile content within profile-page */
+.profile-content {
+  text-align: center;
+  align-items: center;
+  padding: 20px; /* Optional: Add some padding */
+  border: 1px solid #ddd; /* Optional: Add a border */
+  border-radius: 5px; /* Optional: Add rounded corners */
+  background-color: #18c329; /* Optional: Set background color */
+}
+
   
-  .profile {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 100vw;
-    min-height: 100vh;
-    background-color: #f0fff0; /* Light green background */
-  }
-  
-  /* Navigation bar styles */
-  .navigation-bar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 80%;
-    padding: 10px 20px;
-    background-color: #d2f0c2; /* Lighter green for navigation */
-    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
-    margin-bottom: 20px;
-  }
-  
-  .navigation-bar h1 {
-    font-size: 2rem;
-    color: #008000; /* Dark green for heading */
-    margin: 0;
-  }
-  
-  .navigation-right {
-    display: flex;
-    align-items: center;
-  }
-  
-  .navigation-right p {
-    margin-right: 10px;
-    color: #333; /* Darker gray for text */
-  }
-  
-  .navigation-right button {
-    background-color: #008000; /* Dark green for button */
-    color: white;
-    padding: 5px 10px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: all 0.2s ease-in-out;
-  }
-  
-  .navigation-right button:hover {
-    background-color: #006000; /* Darker green on hover */
-  }
   
   /* Form styles */
-  form {
-    display: flex;
-    flex-direction: column;
-    width: 80%;
-    padding: 20px;
-    border-radius: 10px;
-    background-color: #e6f2e0; /* Light green for form */
-    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
-  }
+  
   
   .input-container {
     margin-bottom: 15px;
@@ -116,6 +77,6 @@ button[type="submit"]:hover {
 }
 
 .error {
-  color: red;
+  color: rgb(194, 243, 145);
   margin-top: 10px;
 }

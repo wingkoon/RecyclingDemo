@@ -112,14 +112,12 @@ try {
 
 // Route to update user profile
 app.post('/api/user/profile', async (req, res) => {
-  const { id, email, password, name, phone, address, town, province, country } = req.body;
-
+  const { userProfile } = req.body;
+  console.log(req.body);  
   try {
-    const client = await pool.connect();
-    await client.query('UPDATE users SET name = $1, phone = $2, address = $3, town = $4, province = $5, country = $6 WHERE id = $7',
-      [name, phone, address, town, province, country, id]);
-
-    client.release();
+    const result = await pool.query('UPDATE users SET name = $1, phone = $2, address = $3, town = $4, province = $5, country = $6 WHERE id = $7',
+      [userProfile.name, userProfile.phone, userProfile.address, userProfile.town, userProfile.province, userProfile.country, userProfile.id]);
+    console.log(userProfile);  
     return res.json({ message: 'Profile updated successfully' });
   } catch (error) {
     console.error('Error updating user profile:', error);
@@ -169,14 +167,41 @@ for (let i = 0; i < result.rows.length; i++) {
 });
 
 app.post('/api/matched', async (req, res) => {
-  const {userId, wasteId, providerId} = req. body;
+  const {userId, wasteId, matchresult} = req. body;
   console.log(req.body);
+  const now = new Date();
+  console.log('matchresult', matchresult);
+
+  // Year (YYYY)
+const year = now.getFullYear();
+
+// Month (MM with leading zero)
+const month = String(now.getMonth() + 1).padStart(2, '0');
+
+// Day (DD with leading zero)
+const day = String(now.getDate()).padStart(2, '0');
+
+// Hours (HH with leading zero) - 24-hour format
+const hours = String(now.getHours()).padStart(2, '0');
+
+// Minutes (MM with leading zero)
+const minutes = String(now.getMinutes()).padStart(2, '0');
+
+// Seconds (SS with leading zero)
+const seconds = String(now.getSeconds()).padStart(2, '0');
+
+// Formatted timestamp string (YYYY-MM-DD HH:MM:SS)
+const formattedTimestamp = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+
+console.log(`PostgreSQL accepted timestamp: ${formattedTimestamp}`);
   try {
-    const matched = await pool.query(
-         'INSERT INTO matchd (user_id, waste_id, provider_id) VALUES ($1, $2, $3) RETURNING id',
-         [userId, wasteId, providerId]
+for (i = 0; i < matchresult.length; i ++) {
+    await pool.query(
+         'INSERT INTO matchd (user_id, waste_id, provider_id, created_at) VALUES ($1, $2, $3, $4)',
+         [userId, wasteId, matchresult[i].provider_id, formattedTimestamp]
      );
-     console.log(matched);
+    }
+    res.status(200).json({ 'good': 'success' });
     } catch (error) {
       console.error('Error', error);
     }
@@ -191,6 +216,7 @@ const {email, password} = req.body;
   try {
     const result = await pool.query('SELECT * FROM providers WHERE email = $1;', [email]);
     userProfile = result.rows[0];
+    console.log(userProfile);
     if (!userProfile) {
       return res.status(401).json({ success: false, message: 'Invalid email or password' });
     } else {
@@ -251,6 +277,129 @@ console.error('Registration error:', error);
 
 });
 
+app.post('/api/provider/profile', async (req, res) => {
+  const { userProfile } = req.body;
+  console.log(req.body);  
+  try {
+    const result = await pool.query('UPDATE providers SET name = $1, organization = $2, phone = $3, address = $4 WHERE id = $5',
+      [userProfile.name, userProfile.organization, userProfile.phone, userProfile.address, userProfile.id]);
+    console.log(userProfile);  
+    return res.json({ message: 'Profile updated successfully' });
+  } catch (error) {
+    console.error('Error updating user profile:', error);
+    return res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
+app.post('/api/provider/service', async (req, res) => {
+  const { id } = req.body;
+  console.log(req.body); 
+  console.log(id); 
+  try {
+    const result = await pool.query('SELECT * FROM service_options WHERE provider_id = $1',[id]);
+    console.log(result.rows);  
+    const data = result.rows;
+    return res.json( data );
+  } catch (error) {
+    console.error('No Service Record:', error);
+    return res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
+app.post('/api/provider/service/add', async (req, res) => {
+  const { id, service } = req.body;
+  console.log(req.body);  
+  if (service.length === 0) { return; }
+  const serviceOptions = service.map((item) => ({
+    provider_id: id,
+    location_id: item.location_id,
+    waste_type: item.waste_type,
+  }));
+  
+  const insertQuery = `
+    INSERT INTO service_options (provider_id, location_id, waste_type)
+    VALUES ($1, $2, $3)
+    ON CONFLICT (provider_id, location_id, waste_type) DO NOTHING;
+  `;
+  
+  const values = serviceOptions.flatMap((item) => [item.provider_id, item.location_id, item.waste_type]);
+  
+  try {
+    const result = await pool.query(insertQuery, values);
+    console.log("Number of inserted records:", result.rowCount); // Check inserted count
+    return res.json({ success: true, message: 'Add successfully' });
+  } catch (error) {
+    console.error("Error inserting service options:", error);
+  }
+  
+});
+
+app.post('/api/provider/service/delete', async (req, res) => {
+  const { id, service } = req.body;
+  console.log(req.body);  
+  if (service.length === 0) { return; }
+  try {
+  for (let i = 0; i < service.length; i ++){
+  const result = await pool.query('DELETE FROM service_options WHERE provider_id = $1 AND location_id = $2 AND waste_type = $3;',
+  [id, service[i].location_id, service[i].waste_type]);
+  }
+    return res.json({ success: true, message: 'Delete successfully' });
+  } catch (error) {
+    console.error('No Service Record:', error);
+    return res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
+
+app.post('/api/provider/result', async (req, res) => {
+  const {id} = req.body;
+  console.log(req.body);
+  console.log(id);
+  const result = await pool.query('SELECT * FROM matchd WHERE provider_id = $1;', [id]);
+  let match = result.rows;
+if (match.length === 0) {
+  return;
+}
+console.log('match', match);
+
+// Combine user and waste information into a single object for each match
+try {
+  // Combine user and waste information into a single object for each match
+  const enrichedMatch = await Promise.all(
+    match.map(async (row) => {
+      const user = await pool.query('SELECT * FROM users WHERE id = $1;', [row.user_id]);
+      const waste = await pool.query('SELECT * FROM wastes WHERE id = $1;', [row.waste_id]);
+
+      // Handle potential empty results
+      const userData = user.rows[0] || {}; // Use an empty object if user not found
+      const wasteData = waste.rows[0] || {}; // Use an empty object if waste not found
+
+      return {
+        ...row,
+        client: userData,
+        waste: wasteData,
+      };
+    })
+  );
+
+  // Use enrichedMatch for further processing
+  console.log(enrichedMatch); // Example usage
+} catch (error) {
+  console.error('Error enriching match data:', error.message);
+}});
+
+  app.post('api/provider/match/confirm', async (req, res) => {
+    const {match} = req.body;
+    console.log(req.body);
+    console.log(match);
+    const createTime = await pool.query('SELECT created_at FROM matchd WHERE id = $1;', [match.id]);
+    const userId = await pool.query('UPDATE mathd set confirmed = true AND schedule = $1 WHERE id = $2 RETURNING user_id;', [match.schedule, match.id]);
+    const response = await pool.query('DELETE * FROM matchd WHERE user_id = $1 AND confirmed = false AND created_at = $2;', [userId, createTime]);
+    return res.json({ success: true});
+  
+  });
+
+    
 
 
 

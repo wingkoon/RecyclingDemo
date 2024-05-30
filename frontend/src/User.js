@@ -1,9 +1,15 @@
 import React, { useContext, useState } from 'react';
 import { Link, useNavigate  } from 'react-router-dom'; // For navigation
 import { LoginContext } from './LoginContext'; 
+import Logout from './Logout';
+import Navigation from './NavigationBar';
 
 const User = () => {
   const { isLoggedIn, userEmail } = useContext(LoginContext);
+  const recycleIcon = require('./recyclepro.jpg'); 
+  const wasteIcon = require('./waste.png'); // Replace with your image path
+  const resultsIcon = require('./handshake.png'); // Replace with your image path
+  const logoutIcon = require('./bye.png'); // Replace with your image path
 
   if (!isLoggedIn) {
     return (
@@ -16,25 +22,37 @@ const User = () => {
 
   return (
     <div className="user-dashboard">
+      <Navigation user={userEmail} usertype={'user'} />
       <header className="header">
-        <div className="profile">
-          <p>Welcome, {userEmail}</p>
-          <Link to="/user/profile">View Profile</Link>
+      <div className="profile text-center"> {/* Center "User Dashboard" text */}
+          <h1 style={{ fontSize: '48px', marginBottom: '100px', marginTop: '120px' }}>User Dashboard</h1> {/* Adjust margin as needed */}
         </div>
-        <nav>
-          <ul>
-            <li>
-              <Link to="/user/waste">Post Waste</Link>
-            </li>
-            <li>
-              <Link to="/user/results">Matchmaking Results</Link>
-            </li>
-          </ul>
-          </nav>
-        <Link to="/logout">Logout</Link>
+        <nav className="d-flex flex-wrap justify-content-between">
+          <div className="col-md-6">
+            <Link to="/user/profile" className="btn btn-primary mb-3 d-flex align-items-center justify-content-center">
+              <img src={recycleIcon} alt="Profile" width="30" height="30" /> {/* Add image */}
+              <span className="ms-2">My Profile</span> {/* Button text */}
+            </Link>
+            <Link to="/user/waste" className="btn btn-primary mb-3 d-flex align-items-center justify-content-center">
+              <img src={wasteIcon} alt="Post Waste" width="30" height="30" /> {/* Add image */}
+              <span className="ms-2">Post Waste</span> {/* Button text */}
+            </Link>
+          </div>
+          <div className="col-md-6 mb-3">
+            <Link to="/user/results" className="btn btn-primary mb-3 d-flex align-items-center justify-content-center">
+              <img src={resultsIcon} alt="Matchmaking Results" width="30" height="30" /> {/* Add image */}
+              <span className="ms-2">Matchmaking Results</span> {/* Button text */}
+            </Link>
+            <Link to="/logout" className="btn btn-primary mb-3 d-flex align-items-center justify-content-center">
+              <img src={logoutIcon} alt="Logout" width="30" height="30" /> {/* Add image */}
+              <span className="ms-2">Logout</span> {/* Button text */}
+            </Link>
+          </div>
+        </nav>
       </header>
     </div>
   );
 };
 
 export default User;
+

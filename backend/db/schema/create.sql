@@ -60,7 +60,7 @@ CREATE TABLE IF NOT EXISTS service_options (
 CREATE TABLE IF NOT EXISTS matchd (
   id SERIAL PRIMARY KEY,
   user_id INTEGER REFERENCES users(id),
-  waste_id INTEGER REFERENCES waste(id),
+  waste_id INTEGER REFERENCES wastes(id),
   provider_id INTEGER REFERENCES providers(id),
   confirmed BOOLEAN DEFAULT FALSE,
   schedule TIMESTAMP,

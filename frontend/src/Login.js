@@ -70,7 +70,7 @@ function Login() {
   };
 
   return (
-    <div className="login-register">
+    <div className="User login-register">
       <h2>{isLoginSelected ? 'Welcome! Please login' : 'New user? Please register'}</h2>
       <form onSubmit={(e) => e.preventDefault()}> {/* Prevent default form submission */}
         <label htmlFor="email">Email:</label>

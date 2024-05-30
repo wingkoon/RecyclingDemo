@@ -8,10 +8,12 @@ import Login from './Login'; // Import Login component
 import Profile from './Profile';
 import User from './User';
 import Waste from './Waste';
-import Result from './Result';
 import ProviderLogin from './ProviderLogin';
 import ProviderProfile from './ProviderProfile';
 import Provider from './Provider';
+import ProviderMatchedResult from './ProviderMatchedResult';
+import Logout from './Logout';
+import ServiceOfferPage from './ProviderService';
 import { LoginContext, LoginProvider } from './LoginContext'; 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -24,10 +26,12 @@ root.render(
       <Route path="/user/profile" element={<Profile />} /> 
       <Route path="/user" element={<User />} />
       <Route path="/user/waste" element={<Waste />} />
-      <Route path="/user/result" element={<Result />} />
       <Route path="/provider/login" element={<ProviderLogin />} />
       <Route path="/provider/profile" element={<ProviderProfile />} />
+      <Route path="/provider/service" element={<ServiceOfferPage />} />
       <Route path="/provider" element={<Provider />} />
+      <Route path="/provider/result" element={<ProviderMatchedResult />} />
+      <Route path="/logout" element={<Logout />} />
     </Routes>
   </BrowserRouter>
   </LoginProvider>

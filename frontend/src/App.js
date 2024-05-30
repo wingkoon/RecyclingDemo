@@ -3,7 +3,7 @@ import React, { useState, useRef } from 'react';
 import Login from './Login';
 import Video from './Video'; // Assuming Video.js is in a separate file
 import './App.css';
-
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App() {
     const avatar = "/recycle.png";
