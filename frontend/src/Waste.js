@@ -37,6 +37,7 @@ function PostWastePage() {
   const [errorMessage, setErrorMessage] = useState('');
   const [matchedProviders, setMatchedProviders] = useState([]); // Array to store matched providers
   const [wasteId, setWasteId] = useState(0);
+  const [onSubmit, setOnSubmit] = useState(false);
 
   useEffect(() => {
     // Clear error message on page load
@@ -46,7 +47,7 @@ function PostWastePage() {
   
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+  setOnSubmit(true);
     setErrorMessage(''); // Clear any previous errors
   
     if (!wasteType || !wasteQuantity || !wasteCondition) {
@@ -98,6 +99,7 @@ function PostWastePage() {
     // Simulate saving request data (replace with actual API call)
     if (!matchedProviders.length) {
       alert('No matching providers found for your waste type and town.');
+      navigate('/user');
       return;
     }
 const matchedurl = 'http://localhost:8001/api/matched';
@@ -198,10 +200,15 @@ return (
     )}
     </form>
         )}
+         {/* Display a message if no matched providers are found */}
+         {matchedProviders.length === 0 && userProfile?.town && onSubmit === true && (
+          <p>No matched service providers found for your waste type and location.</p>
+        )}
+      </div>
     </div>
   </div>
-  </div>
 );
+    
 }
 
 export default PostWastePage;

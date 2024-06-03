@@ -13,6 +13,7 @@ import ProviderProfile from './ProviderProfile';
 import Provider from './Provider';
 import ProviderMatchedResult from './ProviderMatchedResult';
 import Logout from './Logout';
+import MatchmakingResults from './MatchMakingResults';
 import ServiceOfferPage from './ProviderService';
 import { LoginContext, LoginProvider } from './LoginContext'; 
 
@@ -26,6 +27,7 @@ root.render(
       <Route path="/user/profile" element={<Profile />} /> 
       <Route path="/user" element={<User />} />
       <Route path="/user/waste" element={<Waste />} />
+      <Route path="/user/result" element={<MatchmakingResults />} />
       <Route path="/provider/login" element={<ProviderLogin />} />
       <Route path="/provider/profile" element={<ProviderProfile />} />
       <Route path="/provider/service" element={<ServiceOfferPage />} />

@@ -166,6 +166,51 @@ for (let i = 0; i < result.rows.length; i++) {
   }
 });
 
+app.post('/api/user/result', async (req, res) => {
+  const {id} = req.body;
+  console.log(req.body);
+  console.log(id);
+  const result = await pool.query('SELECT * FROM matchd WHERE user_id = $1;', [id]);
+  let match = result.rows;
+if (match.length === 0) {
+  return;
+}
+console.log('match', match);
+try {
+for (let i = 0; i < match.length; i ++) {
+  if (match[i].confirm = true) {
+// Combine user and waste information into a single object for each match
+
+  // Combine user and waste information into a single object for each match
+        const provider = await pool.query('SELECT * FROM providers WHERE id = $1;', [match[i].provider_id]);
+      const waste = await pool.query('SELECT * FROM wastes WHERE id = $1;', [match[i].waste_id]);
+      console.log("api call done");
+      console.log(provider.rows[0]);
+      console.log(waste.rows[0]);
+     /* if (!match[i].provider) {
+        match[i].provider = {}; // Create an empty object
+      }*/
+      match[i].provider = provider.rows[0];
+    /*  if (!match[i].waste) {
+        match[i].waste = {}; // Create an empty object
+      }*/
+match[i].waste = waste.rows[0];      
+  }
+}
+  // Use enrichedMatch for further processing
+  console.log(match); // Example usage
+  return res.json({ match: match, success: true });
+} catch (error) {
+  console.error('Error enriching match data:', error.message);
+}});
+
+
+
+
+
+
+
+
 app.post('/api/matched', async (req, res) => {
   const {userId, wasteId, matchresult} = req. body;
   console.log(req.body);
@@ -384,17 +429,24 @@ try {
 
   // Use enrichedMatch for further processing
   console.log(enrichedMatch); // Example usage
+  return res.json({ match: enrichedMatch, success: true });
 } catch (error) {
   console.error('Error enriching match data:', error.message);
 }});
 
-  app.post('api/provider/match/confirm', async (req, res) => {
+  app.post('/api/provider/match/confirm', async (req, res) => {
     const {match} = req.body;
     console.log(req.body);
     console.log(match);
-    const createTime = await pool.query('SELECT created_at FROM matchd WHERE id = $1;', [match.id]);
-    const userId = await pool.query('UPDATE mathd set confirmed = true AND schedule = $1 WHERE id = $2 RETURNING user_id;', [match.schedule, match.id]);
-    const response = await pool.query('DELETE * FROM matchd WHERE user_id = $1 AND confirmed = false AND created_at = $2;', [userId, createTime]);
+    const createAt = await pool.query('SELECT created_at FROM matchd WHERE id = $1;', [match.id]);
+    const createTime = createAt.rows[0].created_at;
+console.log(createTime);
+    //update the record
+    const userId = await pool.query('UPDATE matchd SET confirmed = true, schedule = $1 WHERE id = $2 RETURNING user_id;', [match.schedule, match.id]);
+//as there is someone confirmed to give out service, all other unselected providers will not see the record any more
+const id = userId.rows[0].user_id;
+console.log(id)    
+const response = await pool.query('DELETE FROM matchd WHERE user_id = $1 AND confirmed = false AND created_at = $2;', [id, createTime]);
     return res.json({ success: true});
   
   });

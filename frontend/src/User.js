@@ -39,7 +39,7 @@ const User = () => {
             </Link>
           </div>
           <div className="col-md-6 mb-3">
-            <Link to="/user/results" className="btn btn-primary mb-3 d-flex align-items-center justify-content-center">
+            <Link to="/user/result" className="btn btn-primary mb-3 d-flex align-items-center justify-content-center">
               <img src={resultsIcon} alt="Matchmaking Results" width="30" height="30" /> {/* Add image */}
               <span className="ms-2">Matchmaking Results</span> {/* Button text */}
             </Link>
